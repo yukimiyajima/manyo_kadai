@@ -1,5 +1,5 @@
 # README
-#tasksテーブル
+#taskテーブル
 |  カラム名  | データ型  |
 |  :---     | :---    |
 | title     | string  |
@@ -8,12 +8,20 @@
 
 
 #userテーブル
-|  カラム名  | データ型  |
-|  :---     | :---    |
-| name      | string  |
-| email     | string  |
-| password  | string  |
-| id        |
+|  カラム名          | データ型  |
+|  :---            | :---    |
+| name             | string  |
+| email            | string  |
+| password_digest  | string  |
+| id               |
+
+
+#中間テーブル
+|  カラム名   |
+|  :---      |
+| task_id    |
+| user_id    |  
+
 
 
 
