@@ -1,6 +1,8 @@
+<h1><%= t('view.show_task') %></h1>
+
 <p id="notice"><%= notice %></p>
 <p>タイトル: <%= @task.title %></p>
 <p>内容: <%= @task.content %></p>
 
-<%= link_to 'Edit', edit_task_path(@task) %> |
-<%= link_to 'Back', tasks_path %>
+<%= link_to 'タスク編集', edit_task_path(@task) %> |
+<%= link_to 'タスク一覧に戻る', tasks_path %>

@@ -204,3 +204,9 @@ ja:
       long: "%Y/%m/%d %H:%M"
       short: "%m/%d %H:%M"
     pm: 午後
+  view:
+    sample: サンプル
+    tasks: タスク一覧
+    new_task: 新規タスク作成
+    editing_task: タスク編集
+    show_task: タスク詳細

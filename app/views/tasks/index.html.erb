@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Tasks</h1>
+<h1><%= t('view.tasks') %></h1>
 
 <table>
   <thead>
@@ -17,9 +17,9 @@
       <tr>
         <td><%= task.title %></td>
         <td><%= task.content %></td>
-        <td><%= link_to 'Show', task %></td>
-        <td><%= link_to 'Edit', edit_task_path(task) %></td>
-        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '詳細', task %></td>
+        <td><%= link_to '編集', edit_task_path(task) %></td>
+        <td><%= link_to '削除', task, method: :delete, data: { confirm: '本当に削除していいですか？' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -27,5 +27,5 @@
 
 <br>
 
-<%= link_to 'New Task', new_task_path %>
+<%= link_to 'タスク新規作成', new_task_path %>
 
