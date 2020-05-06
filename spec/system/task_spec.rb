@@ -2,8 +2,8 @@ require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
   before do
     # あらかじめタスク一覧のテストで使用するためのタスクを二つ作成する
-    FactoryBot.create(:task)
-    FactoryBot.create(:second_task)
+    @task1 = FactoryBot.create(:task)
+    @task2 = FactoryBot.create(:second_task)
   end
   
   describe 'タスク一覧画面' do
@@ -37,7 +37,7 @@ end
   describe 'タスク詳細画面' do
      context '任意のタスク詳細画面に遷移した場合' do
        it '該当タスクの内容が表示されたページに遷移する' do
-        visit task_path(task.id)
+        visit task_path(@task1)
         expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
        end
      end
