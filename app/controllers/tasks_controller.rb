@@ -3,7 +3,7 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(created_at: "DESC")
   end
 
   # GET /tasks/1
@@ -24,7 +24,7 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
 
     if @task.save
-      redirect_to @task, notice: 'Task was successfully created.'
+      redirect_to @task, notice: 'タスクを作成しました！'
     else
       render :new
     end
@@ -33,7 +33,7 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1
   def update
     if @task.update(task_params)
-      redirect_to @task, notice: 'Task was successfully updated.'
+      redirect_to @task, notice: 'タスクを編集しました'
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   def destroy
     @task.destroy
-    redirect_to tasks_url, notice: 'Task was successfully destroyed.'
+    redirect_to tasks_url, notice: 'タスクを削除しました'
   end
 
   private
