@@ -8,13 +8,19 @@ class TasksController < ApplicationController
       # binding.irb
       # @tasks = Task.all.order(created_at: "ASC")
       # @tasks = Task.where(title: params[:title])
-      @tasks = Task.where("title LIKE ?", "%#{params[:title]}%")
+      # ,(params[:page]).per(10)
+      @tasks = Task.where("title LIKE ?", "%#{params[:title]}%").page(params[:page]).per(5)
+      if params[:status].present?
+        @tasks = Task.where("title LIKE ?", "%#{params[:title]}%").where(status: params[:status]).page(params[:page]).per(5)
+      end
     elsif params[:status].present?
-      @tasks = Task.where(status: params[:status])
+      @tasks = Task.where(status: params[:status]).page(params[:page]).per(5)
     elsif (params[:sort_priority])
-      @tasks = Task.all.order(priority: "ASC")
+      @tasks = Task.all.order(priority: "ASC").page(params[:page]).per(5)
+    elsif (params[:sort_expired])
+      @tasks = Task.all.order(deadline: "ASC").page(params[:page]).per(5)
     else
-      @tasks = Task.all.order(created_at: "DESC")
+      @tasks = Task.all.order(created_at: "DESC").page(params[:page]).per(5)
     end
   end
 
@@ -27,11 +33,9 @@ class TasksController < ApplicationController
     @task = Task.new
   end
 
-  # GET /tasks/1/edit
   def edit
   end
 
-  # POST /tasks
   def create
     @task = Task.new(task_params)
 
@@ -42,7 +46,6 @@ class TasksController < ApplicationController
     end
   end
 
-  # PATCH/PUT /tasks/1
   def update
     if @task.update(task_params)
       redirect_to @task, notice: 'タスクを編集しました'
@@ -51,19 +54,17 @@ class TasksController < ApplicationController
     end
   end
 
-  # DELETE /tasks/1
   def destroy
     @task.destroy
     redirect_to tasks_url, notice: 'タスクを削除しました'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    
     def set_task
       @task = Task.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def task_params
       params.require(:task).permit(:title, :content, :deadline, :priority, :status)
     end
