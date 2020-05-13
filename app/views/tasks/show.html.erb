@@ -3,6 +3,9 @@
 <p id="notice"><%= notice %></p>
 <p>タイトル: <%= @task.title %></p>
 <p>内容: <%= @task.content %></p>
+<p>終了期限: <%= @task.deadline %></p>
+<p>優先順位: <%= @task.priority %></p>
+<p>ステータス: <%= @task.status %></p>
 
 <%= link_to 'タスク編集', edit_task_path(@task) %> |
 <%= link_to 'タスク一覧に戻る', tasks_path %>

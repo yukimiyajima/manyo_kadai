@@ -32,8 +32,9 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'title'
         expect(page).to have_content 'content'
       end
+    end
   end
-end
+
   describe 'タスク詳細画面' do
      context '任意のタスク詳細画面に遷移した場合' do
        it '該当タスクの内容が表示されたページに遷移する' do
@@ -41,5 +42,50 @@ end
         expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
        end
      end
+  end
+
+  describe 'タスク一覧画面' do
+    context '検索をした場合' do
+      it "タイトル検索ができる" do
+        visit tasks_path
+        fill_in 'title', with: 'Factoryで作ったデフォルトのタイトル１'
+        click_button 'commit'
+        expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
+      end
+      it "ステータス検索ができる" do
+        visit tasks_path
+        select('未着手')
+        click_button 'commit'
+        expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
+      end
+      it "タイトルとステータスの両方が検索出来る" do
+        visit tasks_path
+        fill_in 'title', with: 'Factoryで作ったデフォルトのタイトル１'
+        select('未着手')
+        click_button 'commit'
+        expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
+      end
+    end
+  end
+
+  describe 'タスク一覧画面' do
+    context 'ソートするボタンを押した場合'do
+      it "終了期限の降順でソート出来る" do
+        visit tasks_path
+        # tasks_path(sort_expired: "true")
+        click_link "終了期限でソートする"
+        sleep (0.5)
+        task_list = all('tbody tr')
+        expect(task_list[1]).to have_content 'Factoryで作ったデフォルトのタイトル２'
+        expect(task_list[0]).to have_content 'Factoryで作ったデフォルトのタイトル１'
+      end
+      it "優先順位の降順でソートする" do
+        visit tasks_path
+        tasks_path(sort_priority: "true")
+        task_list = all('tbody tr')
+        expect(task_list[0]).to have_content 'Factoryで作ったデフォルトのタイトル２'
+        expect(task_list[1]).to have_content 'Factoryで作ったデフォルトのタイトル１'
+      end
+    end
   end
 end
