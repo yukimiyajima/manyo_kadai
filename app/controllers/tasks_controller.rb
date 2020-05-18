@@ -1,27 +1,8 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
 
-  # GET /tasks
   def index
-    # binding.irb
-    if params[:title].present?
-      # binding.irb
-      # @tasks = Task.all.order(created_at: "ASC")
-      # @tasks = Task.where(title: params[:title])
-      # ,(params[:page]).per(10)
-      @tasks = Task.where("title LIKE ?", "%#{params[:title]}%").page(params[:page]).per(5)
-      if params[:status].present?
-        @tasks = Task.where("title LIKE ?", "%#{params[:title]}%").where(status: params[:status]).page(params[:page]).per(5)
-      end
-    elsif params[:status].present?
-      @tasks = Task.where(status: params[:status]).page(params[:page]).per(5)
-    elsif (params[:sort_priority])
-      @tasks = Task.all.order(priority: "ASC").page(params[:page]).per(5)
-    elsif (params[:sort_expired])
-      @tasks = Task.all.order(deadline: "ASC").page(params[:page]).per(5)
-    else
-      @tasks = Task.all.order(created_at: "DESC").page(params[:page]).per(5)
-    end
+    @tasks = Task.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(5)
   end
 
   # GET /tasks/1
@@ -46,6 +27,11 @@ class TasksController < ApplicationController
     end
   end
 
+  def confirm
+    @blog = current_user.blogs.build(blog_params)
+    render :new if @blog.invalid?
+  end
+
   def update
     if @task.update(task_params)
       redirect_to @task, notice: 'タスクを編集しました'
@@ -68,4 +54,5 @@ class TasksController < ApplicationController
     def task_params
       params.require(:task).permit(:title, :content, :deadline, :priority, :status)
     end
+
 end

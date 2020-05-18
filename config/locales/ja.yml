@@ -210,3 +210,7 @@ ja:
     new_task: 新規タスク作成
     editing_task: タスク編集
     show_task: タスク詳細
+    admin_new: 管理者新規作成
+    admin_edit: 管理者編集画面
+    admin_show: 管理者詳細確認画面
+    admin_index: ユーザー管理一覧画面

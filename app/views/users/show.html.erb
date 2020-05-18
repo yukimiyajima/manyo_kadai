@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<h1><%= @user.name %>のページ</h1>
+
 <p>
   <strong>Name:</strong>
   <%= @user.name %>
@@ -10,10 +12,7 @@
   <%= @user.email %>
 </p>
 
-<p>
-  <strong>Password digest:</strong>
-  <%= @user.password_digest %>
-</p>
+<%= link_to 'タスク一覧', tasks_path %>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
