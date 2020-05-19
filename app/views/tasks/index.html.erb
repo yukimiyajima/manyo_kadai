@@ -13,14 +13,15 @@
   <%= form.submit "検索" %>
 <% end %>
 <table class="table table-striped">
+  <br>
   <thead>
-    <th colspan="3"></th>
     <tr>
       <th>タイトル</th>
       <th>内容</th>
       <th>終了期限</th>
       <th>優先順位</th>
       <th>ステータス</th>
+      <th colspan="3"></th>
     </tr>
   </thead>
   <tbody>
@@ -41,4 +42,8 @@
 <br>
 <%= paginate @tasks %>
 <br>
-<%= link_to 'タスク新規作成', new_task_path, class:"btn btn-primary"%>
+<%= link_to 'タスク新規作成', new_task_path, class:"btn btn-primary" %>
+
+<% if current_user.admin? %>
+  <%= link_to '管理者画面', admin_users_path, class:"btn btn-primary" %>
+<% end %>

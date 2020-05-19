@@ -2,7 +2,8 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
 
   def index
-    @tasks = Task.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(5)
+    # @tasks = current_user.tasks.find(params[:id]).page(params[:page]).per(5)
+    @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(5)
   end
 
   # GET /tasks/1
@@ -28,7 +29,7 @@ class TasksController < ApplicationController
   end
 
   def confirm
-    @blog = current_user.blogs.build(blog_params)
+    @blog = current_user.tasks.build(task_params)
     render :new if @blog.invalid?
   end
 

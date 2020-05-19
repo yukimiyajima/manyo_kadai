@@ -1,4 +1,5 @@
 class Admin::UsersController < ApplicationController
+  before_action :admin_user, only: [:new, :index, :show, :edit, :update, :destroy]
 
   def index
     @user = User.all
@@ -28,7 +29,7 @@ class Admin::UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      redirect_to admin_user_url(@user), notice: "adminユーザー情報を更新しました"
+      redirect_to admin_users_path, notice: "adminユーザー情報を更新しました"
     else
       render :edit
     end
@@ -37,13 +38,20 @@ class Admin::UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     @user.destroy
-    redirect_to admin_user_url, notice: "adminユーザーを削除しました"
+    redirect_to admin_users_path, notice: "adminユーザーを削除しました"
   end
 
   private
 
   def user_params
     params.require(:user).permit(:name, :email, :admin, :password, :password_confirmation)
+  end
+
+  def admin_user
+    if not current_user.admin
+      flash[:notice] = "管理者ではありません"
+      redirect_to(root_path)
+    end
   end
 
 end

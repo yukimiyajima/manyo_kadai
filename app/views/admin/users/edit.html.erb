@@ -1,2 +1,5 @@
 <h1><%= t('view.admin_edit') %></h1>
-<p>Find me in app/views/admin/users/edit.html.erb</p>
+
+<%= render partial: 'form', locals: { user: @user} %>
+<br>
+<%= link_to "ユーザーの一覧", admin_users_path, class:"nav-link" %>
