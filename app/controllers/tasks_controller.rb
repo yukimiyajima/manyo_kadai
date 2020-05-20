@@ -1,9 +1,10 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  PER = 5
 
   def index
     # @tasks = current_user.tasks.find(params[:id]).page(params[:page]).per(5)
-    @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(5)
+    @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(PER)
   end
 
   # GET /tasks/1
