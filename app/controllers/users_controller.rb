@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show,]
+  before_action :login_check, only: [:new]
   skip_before_action :login_required, only:[:new, :create,]
 
   # GET /users/1
@@ -26,6 +27,12 @@ class UsersController < ApplicationController
   
   private
     # Use callbacks to share common setup or constraints between actions.
+    def login_check
+      if logged_in?
+        redirect_to tasks_path, notice: '既にログインしています'
+      end
+    end
+
     def set_user
       @user = User.find(params[:id])
     end

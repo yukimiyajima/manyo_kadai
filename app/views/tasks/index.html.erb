@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1><%= t('view.tasks') %></h1>
 <%= link_to "終了期限でソートする", tasks_path(column: "deadline", sort: "ASC"), class:"btn btn-primary" %>
 <%= link_to "優先順位でソートする", tasks_path(column: "priority", sort: "ASC"), class:"btn btn-primary" %>
