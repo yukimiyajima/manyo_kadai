@@ -1,8 +1,14 @@
-<p id="notice"><%= notice %></p>
-
 <h1><%= t('view.tasks') %></h1>
-<%= link_to "終了期限でソートする", tasks_path(sort_expired: "true"), class:"btn btn-primary" %>
-<%= link_to "優先順位でソートする", tasks_path(sort_priority: "true"), class:"btn btn-primary" %>
+
+<div>
+  <% if current_user.admin? %>
+    <%= link_to '管理者画面', admin_users_path, class:"btn btn-primary" %>
+  <% end %>
+</div>
+<br>
+
+<%= link_to "終了期限でソートする", tasks_path(column: "deadline", sort: "ASC"), class:"btn btn-primary" %>
+<%= link_to "優先順位でソートする", tasks_path(column: "priority", sort: "ASC"), class:"btn btn-primary" %>
 <br>
 <br>
 <%= form_with(model: @task, local: true, method: :get) do |form| %>
@@ -12,17 +18,16 @@
   <%= form.select :status, [["未着手", 0],["着手中", 1],["完了", 2]], include_blank: true %>
   <%= form.submit "検索" %>
 <% end %>
-<table class="table">
+<table class="table table-striped">
+  <br>
   <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
     <tr>
       <th>タイトル</th>
       <th>内容</th>
       <th>終了期限</th>
       <th>優先順位</th>
       <th>ステータス</th>
+      <th colspan="3"></th>
     </tr>
   </thead>
   <tbody>
@@ -33,9 +38,9 @@
         <td><%= task.deadline %></td>
         <td><%= task.priority %></td>
         <td><%= task.status %></td>
-        <td><%= link_to '詳細', task %></td>
-        <td><%= link_to '編集', edit_task_path(task) %></td>
-        <td><%= link_to '削除', task, method: :delete, data: { confirm: '本当に削除していいですか？' } %></td>
+        <td><%= link_to '詳細', task, class:"btn btn-success"%></td>
+        <td><%= link_to '編集', edit_task_path(task), class:"btn btn-warning" %></td>
+        <td><%= link_to '削除', task, method: :delete, data: { confirm: '本当に削除していいですか？' }, class:"btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -43,4 +48,5 @@
 <br>
 <%= paginate @tasks %>
 <br>
-<%= link_to 'タスク新規作成', new_task_path, class:"btn btn-primary"%>
+<%= link_to 'タスク新規作成', new_task_path, class:"btn btn-primary" %>
+

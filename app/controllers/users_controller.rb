@@ -1,13 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-
-  # GET /users
-  def index
-    @users = User.all
-  end
+  before_action :user_check, only: [:show]
+  before_action :login_check, only: [:new]
+  skip_before_action :login_required, only:[:new, :create,]
 
   # GET /users/1
   def show
+    @user = User.find(params[:id])
   end
 
   # GET /users/new
@@ -15,44 +13,32 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  # GET /users/1/edit
-  def edit
-  end
-
   # POST /users
   def create
     @user = User.new(user_params)
 
     if @user.save
-      redirect_to @user, notice: 'User was successfully created.'
+      session[:user_id] = @user.id
+      redirect_to tasks_path(@user.id)
     else
       render :new
     end
   end
-
-  # PATCH/PUT /users/1
-  def update
-    if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
-    else
-      render :edit
-    end
-  end
-
-  # DELETE /users/1
-  def destroy
-    @user.destroy
-    redirect_to users_url, notice: 'User was successfully destroyed.'
-  end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
+    def login_check
+      if logged_in?
+        redirect_to tasks_path, notice: '既にログインしています'
+      end
+    end
+
+    def user_check
+      redirect_to root_path, notice: '他のユーザー情報は見れません' unless current_user.id == params[:id].to_i || current_user.admin?
     end
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.require(:user).permit(:name, :email, :password_digest)
+      params.require(:user).permit(:name, :email, :password,:password_confirmation)
     end
 end

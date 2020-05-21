@@ -1,34 +1,14 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  PER = 5
 
-  # GET /tasks
   def index
-    # binding.irb
-    if params[:title].present?
-      # binding.irb
-      # @tasks = Task.all.order(created_at: "ASC")
-      # @tasks = Task.where(title: params[:title])
-      # ,(params[:page]).per(10)
-      @tasks = Task.where("title LIKE ?", "%#{params[:title]}%").page(params[:page]).per(5)
-      if params[:status].present?
-        @tasks = Task.where("title LIKE ?", "%#{params[:title]}%").where(status: params[:status]).page(params[:page]).per(5)
-      end
-    elsif params[:status].present?
-      @tasks = Task.where(status: params[:status]).page(params[:page]).per(5)
-    elsif (params[:sort_priority])
-      @tasks = Task.all.order(priority: "ASC").page(params[:page]).per(5)
-    elsif (params[:sort_expired])
-      @tasks = Task.all.order(deadline: "ASC").page(params[:page]).per(5)
-    else
-      @tasks = Task.all.order(created_at: "DESC").page(params[:page]).per(5)
-    end
+    @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(PER)
   end
 
-  # GET /tasks/1
   def show
   end
 
-  # GET /tasks/new
   def new
     @task = Task.new
   end
@@ -37,7 +17,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
 
     if @task.save
       redirect_to @task, notice: 'タスクを作成しました！'
@@ -68,4 +48,5 @@ class TasksController < ApplicationController
     def task_params
       params.require(:task).permit(:title, :content, :deadline, :priority, :status)
     end
+
 end
