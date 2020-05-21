@@ -19,6 +19,10 @@
       <%= form.label :content %>
       <%= form.text_field :content %>
     </div>
+    <div class="form-check">
+    <%= form.label :label %>
+    <%= form.collection_check_boxes(:label_ids, Label.all, :id, :name, include_hidden: false) %>
+    </div>
     <div class="task_title">
       <%= form.label :deadline %>
       <%= form.date_field :deadline %>

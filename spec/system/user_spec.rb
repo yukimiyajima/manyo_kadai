@@ -1,7 +1,9 @@
 require 'rails_helper'
 RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :system do
+  before do
   FactoryBot.create(:user)
   FactoryBot.create(:admin_user)
+  end
 
   def login
     visit new_session_path
@@ -21,8 +23,8 @@ RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :
     context 'ユーザのデータがなくログインしていない場合' do
       it 'ユーザ新規登録のテスト' do
         visit new_user_path
-        fill_in 'user[name]', with: 'sample01'
-        fill_in 'user[email]', with: 'sample01@example.com'
+        fill_in 'user[name]', with: 'aaa'
+        fill_in 'user[email]', with: 'bbb@example.com'
         fill_in 'user[password]', with: '00000000'
         fill_in 'user[password_confirmation]', with: '00000000'
         click_on '登録する'
@@ -76,12 +78,13 @@ RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :
       admin_login
       click_on '管理者画面'
       click_on 'ユーザー新規作成'
-      fill_in 'user[name]', with: 'sample02'
-      fill_in 'user[email]', with: 'sample02@example.com'
+      fill_in 'user[name]', with: 'sample03'
+      fill_in 'user[email]', with: 'sample03@example.com'
       fill_in 'user[password]', with: '00000000'
       fill_in 'user[password_confirmation]', with: '00000000'
       click_on '登録する'
-      expect(page).to have_content 'ユーザーを登録しました'
+      sleep 0.5
+      expect(page).to have_content '詳細確認画面'
     end
     it '管理者はユーザーの詳細画面にアクセス出来るか' do
       admin_login

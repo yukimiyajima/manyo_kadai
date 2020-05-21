@@ -2,14 +2,22 @@ require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
 
   before do
+
     @user = FactoryBot.create(:user)
     visit new_session_path
       fill_in 'Email', with: 'sample@example.com'
       fill_in 'Password', with: '00000000'
       click_on 'ログインする'
-    # あらかじめタスク一覧のテストで使用するためのタスクを二つ作成する
+    
     @task1 = FactoryBot.create(:task, user: @user)
     @task2 = FactoryBot.create(:second_task, user: @user)
+
+    @label1 = FactoryBot.create(:label)
+    @label2 = FactoryBot.create(:second_label)
+
+    FactoryBot.create(:labelling,task: @task1, label: @label1)
+    FactoryBot.create(:labelling,task: @task2, label: @label2)
+
   end
   
   describe 'タスク一覧画面' do
@@ -69,6 +77,38 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'title', with: 'Factoryで作ったデフォルトのタイトル１'
         select('未着手')
         click_button 'commit'
+        expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
+      end
+      it "ラベル検索が出来る" do
+        visit tasks_path
+        select("label1")
+        click_button 'commit'
+        expect(page).to have_content 'label1'
+      end
+      it "ラベルとタイトルの両方で検索が出来る" do
+        visit tasks_path
+        fill_in 'title', with: 'Factoryで作ったデフォルトのタイトル１'
+        select("label1")
+        click_button 'commit'
+        expect(page).to have_content 'label1'
+        expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
+      end
+      it "ラベルとステータスの両方で検索が出来る" do
+        visit tasks_path
+        select('未着手')
+        select("label1")
+        click_button 'commit'
+        expect(page).to have_content 'label1'
+        expect(page).to have_content '未着手'
+      end
+      it "タイトルとラベルとステータスで検索が出来る" do
+        visit tasks_path
+        select('未着手')
+        select("label1")
+        fill_in 'title', with: 'Factoryで作ったデフォルトのタイトル１'
+        click_button 'commit'
+        expect(page).to have_content 'label1'
+        expect(page).to have_content '未着手'
         expect(page).to have_content 'Factoryで作ったデフォルトのタイトル１'
       end
     end

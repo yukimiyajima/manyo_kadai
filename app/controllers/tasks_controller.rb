@@ -3,7 +3,11 @@ class TasksController < ApplicationController
   PER = 5
 
   def index
-    @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(PER)
+    if params[:label_id].present?
+     @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).find_label(labels: {id: params[:label_id]}).sort_column(params[:column],params[:sort]).page(params[:page]).per(PER)
+    else 
+      @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(PER)
+    end
   end
 
   def show
@@ -46,7 +50,7 @@ class TasksController < ApplicationController
     end
 
     def task_params
-      params.require(:task).permit(:title, :content, :deadline, :priority, :status)
+      params.require(:task).permit(:title, :content, :deadline, :priority, :status, {label_ids:[]})
     end
 
 end
