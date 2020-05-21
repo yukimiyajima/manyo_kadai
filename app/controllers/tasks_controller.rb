@@ -3,15 +3,12 @@ class TasksController < ApplicationController
   PER = 5
 
   def index
-    # @tasks = current_user.tasks.find(params[:id]).page(params[:page]).per(5)
     @tasks = current_user.tasks.find_title(params[:title]).find_status(params[:status]).sort_column(params[:column],params[:sort]).page(params[:page]).per(PER)
   end
 
-  # GET /tasks/1
   def show
   end
 
-  # GET /tasks/new
   def new
     @task = Task.new
   end
@@ -27,11 +24,6 @@ class TasksController < ApplicationController
     else
       render :new
     end
-  end
-
-  def confirm
-    @blog = current_user.tasks.build(task_params)
-    render :new if @blog.invalid?
   end
 
   def update

@@ -1,9 +1,15 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
+
   before do
+    @user = FactoryBot.create(:user)
+    visit new_session_path
+      fill_in 'Email', with: 'sample@example.com'
+      fill_in 'Password', with: '00000000'
+      click_on 'ログインする'
     # あらかじめタスク一覧のテストで使用するためのタスクを二つ作成する
-    @task1 = FactoryBot.create(:task)
-    @task2 = FactoryBot.create(:second_task)
+    @task1 = FactoryBot.create(:task, user: @user)
+    @task2 = FactoryBot.create(:second_task, user: @user)
   end
   
   describe 'タスク一覧画面' do

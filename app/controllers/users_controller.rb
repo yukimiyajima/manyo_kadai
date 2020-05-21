@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show,]
+  before_action :user_check, only: [:show]
   before_action :login_check, only: [:new]
   skip_before_action :login_required, only:[:new, :create,]
 
@@ -33,8 +33,8 @@ class UsersController < ApplicationController
       end
     end
 
-    def set_user
-      @user = User.find(params[:id])
+    def user_check
+      redirect_to root_path, notice: '他のユーザー情報は見れません' unless current_user.id == params[:id].to_i || current_user.admin?
     end
 
     # Only allow a trusted parameter "white list" through.

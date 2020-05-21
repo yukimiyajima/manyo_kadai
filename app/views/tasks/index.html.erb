@@ -1,4 +1,12 @@
 <h1><%= t('view.tasks') %></h1>
+
+<div>
+  <% if current_user.admin? %>
+    <%= link_to '管理者画面', admin_users_path, class:"btn btn-primary" %>
+  <% end %>
+</div>
+<br>
+
 <%= link_to "終了期限でソートする", tasks_path(column: "deadline", sort: "ASC"), class:"btn btn-primary" %>
 <%= link_to "優先順位でソートする", tasks_path(column: "priority", sort: "ASC"), class:"btn btn-primary" %>
 <br>
@@ -42,6 +50,3 @@
 <br>
 <%= link_to 'タスク新規作成', new_task_path, class:"btn btn-primary" %>
 
-<% if current_user.admin? %>
-  <%= link_to '管理者画面', admin_users_path, class:"btn btn-primary" %>
-<% end %>

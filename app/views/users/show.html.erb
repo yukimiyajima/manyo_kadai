@@ -3,13 +3,29 @@
 <h1><%= @user.name %>のページ</h1>
 
 <p>
-  <strong>Name:</strong>
+  <strong>名前:</strong>
   <%= @user.name %>
 </p>
-
 <p>
-  <strong>Email:</strong>
+  <strong>メールアドレス:</strong>
   <%= @user.email %>
 </p>
 
-<%= link_to 'タスク一覧', tasks_path %>
+  <table class="table table-striped">
+    <tbody>
+      <% @user.tasks.each do |task| %>
+        <tr>
+          <td><%= task.title %></td>
+          <td><%= task.content %></td>
+          <td><%= task.deadline %></td>
+          <td><%= task.priority %></td>
+          <td><%= task.status %></td>
+          <td><%= link_to '詳細', task, class:"btn btn-success"%></td>
+          <td><%= link_to '編集', edit_task_path(task), class:"btn btn-warning" %></td>
+          <td><%= link_to '削除', task, method: :delete, data: { confirm: '本当に削除していいですか？' }, class:"btn btn-danger" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to 'タスク一覧に戻る', tasks_path %>

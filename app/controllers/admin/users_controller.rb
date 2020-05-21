@@ -1,6 +1,6 @@
 class Admin::UsersController < ApplicationController
   before_action :admin_user, only: [:new, :index, :show, :edit, :update, :destroy]
-  before_action :login_check, only: [:new]
+  before_action :do_not_destroy_last_admin, only: [:destroy]
   
   def index
     @user = User.all
@@ -21,7 +21,7 @@ class Admin::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      redirect_to admin_user_path(@user), notice: "adminユーザーを登録しました"
+      redirect_to admin_user_path(@user), notice: "ユーザーを登録しました"
     else
       render :new
     end
@@ -30,7 +30,7 @@ class Admin::UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      redirect_to admin_users_path, notice: "adminユーザー情報を更新しました"
+      redirect_to admin_users_path, notice: "ユーザー情報を更新しました"
     else
       render :edit
     end
@@ -39,7 +39,7 @@ class Admin::UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     @user.destroy
-    redirect_to admin_users_path, notice: "adminユーザーを削除しました"
+    redirect_to admin_users_path, notice: "ユーザーを削除しました"
   end
 
   private
@@ -55,10 +55,8 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  def login_check
-    if logged_in?
-      redirect_to tasks_path, notice: '既にログインしています'
-    end
+  def do_not_destroy_last_admin
+    redirect_to admin_users_path, notice: '管理者が残り1人の為、削除されませんでした' if User.where(admin: true).count <= 1 && current_user.id == params[:id].to_i
   end
 
 end
