@@ -3,6 +3,11 @@
 <p id="notice"><%= notice %></p>
 <p>タイトル: <%= @task.title %></p>
 <p>内容: <%= @task.content %></p>
+<p>ラベル:
+<% @task.labels.each do |label| %>
+  <%= label.name %>
+<% end %>
+</p>
 <p>終了期限: <%= @task.deadline %></p>
 <p>優先順位: <%= @task.priority %></p>
 <p>ステータス: <%= @task.status %></p>

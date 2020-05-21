@@ -5,3 +5,7 @@ User.create!(
   password_confirmation: "admin@example.com",
   admin: true,
 )
+
+Label.create!(name: '仕事')
+Label.create!(name: 'プライベート')
+Label.create!(name: '休暇')
